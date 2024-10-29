@@ -208,7 +208,7 @@ const ParallaxHome = () => {
         >
           <h2 className="text-4xl font-bold text-[#cc9dff] mb-6">Begin Your Journey</h2>
           <p className="text-xl text-[#cc9dff]/70 mb-8">
-            Ready to explore what the cards have in store for you? Let's connect for a live reading.
+            Ready to explore what the cards have in store for you? Let&apos;s connect for a live reading.
           </p>
           <button className="px-8 py-4 bg-[#2a1744] hover:bg-[#3a1f5e] text-[#cc9dff] rounded-full text-xl transition-all transform hover:scale-105 border border-[#cc9dff]/30">
             Book Your Reading
