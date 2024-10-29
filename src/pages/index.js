@@ -1,115 +1,222 @@
-import Image from "next/image";
-import localFont from "next/font/local";
+import React, { useEffect, useState } from 'react';
+import { Star, Sparkles, Moon } from 'lucide-react';
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const ParallaxHome = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const [shimmer, setShimmer] = useState(1);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-export default function Home() {
+  useEffect(() => {
+    const shimmerInterval = setInterval(() => {
+      setShimmer(Math.random() * 0.15 + 0.85);
+    }, 100);
+    return () => clearInterval(shimmerInterval);
+  }, []);
+
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/pages/index.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="relative bg-gradient-to-b from-black via-[#1a0f2e] to-black">
+      <style jsx global>{`
+        @keyframes float {
+          0% {
+            transform: translateY(100vh) scale(1);
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.8;
+          }
+          90% {
+            opacity: 0.6;
+          }
+          100% {
+            transform: translateY(-20vh) scale(1.5);
+            opacity: 0;
+          }
+        }
+      `}</style>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <div 
+        className="fixed inset-0 opacity-30"
+        style={{
+          backgroundImage: 'linear-gradient(0deg, rgba(23,0,32,0.3), transparent)',
+          transform: `translateY(${scrollY * 0.2}px)`
+        }}
+      />
+
+      <div className="fixed inset-0 opacity-30">
+        {[...Array(30)].map((_, i) => (
+          <Star
+            key={i}
+            className="absolute text-[#cc9dff]"
+            size={Math.random() * 12 + 6}
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              opacity: Math.random() * 0.3 + 0.2,
+              transform: `translateY(${scrollY * 0.1}px) rotate(${scrollY * 0.02}deg)`,
+              filter: 'blur(1px)'
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0">
+          <div 
+            className="absolute top-1/2 left-1/2 w-96 h-96 border border-[#cc9dff]/30 rounded-full"
+            style={{
+              transform: `translate(-50%, -50%) rotate(${scrollY * 0.1}deg)`,
+              boxShadow: `0 0 40px rgba(204, 157, 255, ${shimmer * 0.1})`
+            }}
+          />
+          <div 
+            className="absolute top-1/2 left-1/2 w-80 h-80 border border-[#9b4dff]/20 rounded-full"
+            style={{
+              transform: `translate(-50%, -50%) rotate(${-scrollY * 0.15}deg)`
+            }}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        
+        <div 
+          className="text-center relative"
+          style={{ transform: `translateY(${scrollY * -0.5}px)` }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <div className="w-48 h-48 mx-auto rounded-full mb-8 shadow-2xl border border-[#cc9dff]/30 overflow-hidden">
+            <img src="/logo.png" alt="MaidenandMermaid" className="w-full h-full object-cover" />
+          </div>
+          <h1 className="text-7xl font-bold text-[#cc9dff] mb-6" style={{ textShadow: '0 0 20px rgba(204, 157, 255, 0.5)' }}>
+            Maiden & Mermaid
+          </h1>
+          <p className="text-2xl text-[#cc9dff]/70">Illuminating Your Path Through Live Readings</p>
+        </div>
+      </div>
+
+      <div className="relative min-h-screen flex items-center py-32">
+        <div className="absolute inset-0">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-lg overflow-hidden"
+              style={{
+                width: '120px',
+                height: '180px',
+                top: `${20 + i * 15}%`,
+                left: `${10 + i * 20}%`,
+                transform: `translateY(${scrollY * (0.2 + i * 0.1)}px) rotate(${15 + i * 10}deg)`,
+                boxShadow: '0 0 30px rgba(0,0,0,0.5)'
+              }}
+            >
+              <img 
+                src="/tarotback.png" 
+                alt="Tarot card back" 
+                className="w-full h-full object-cover"
+                style={{
+                  filter: `brightness(${0.8 + i * 0.1}) saturate(${1 + i * 0.1})`
+                }}
+              />
+              <div 
+                className="absolute inset-0 bg-[#cc9dff]/10"
+                style={{
+                  opacity: shimmer * 0.3,
+                  boxShadow: `inset 0 0 20px rgba(204, 157, 255, ${shimmer * 0.2})`
+                }}
+              />
+              <div className="absolute inset-0 border border-[#cc9dff]/20 rounded-lg" />
+            </div>
+          ))}
+        </div>
+        <div className="container mx-auto px-4 text-right relative">
+          <div className="ml-auto max-w-xl" style={{ transform: `translateX(${scrollY * -0.2}px)` }}>
+            <h2 className="text-4xl font-bold text-[#cc9dff] mb-6">Live Personal Readings</h2>
+            <p className="text-lg text-[#cc9dff]/70 leading-relaxed">
+              Experience the power of real-time guidance as the cards reveal their wisdom.
+              Each reading is a unique journey, tailored specifically to you.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative min-h-screen flex items-center py-32">
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(4)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute border border-[#9b4dff]/20 rounded-full"
+              style={{
+                width: `${500 + i * 200}px`,
+                height: `${500 + i * 200}px`,
+                left: '50%',
+                top: '50%',
+                transform: `translate(-50%, -50%) rotate(${scrollY * (0.1 + i * 0.05)}deg)`,
+                boxShadow: `0 0 40px rgba(155, 77, 255, ${shimmer * 0.1})`
+              }}
+            />
+          ))}
+        </div>
+        <div className="container mx-auto px-4">
+          <div 
+            className="max-w-xl bg-black/40 backdrop-blur-sm p-8 rounded-lg border border-[#cc9dff]/20"
+            style={{ transform: `translateX(${scrollY * 0.2}px)` }}
+          >
+            <h2 className="text-4xl font-bold text-[#cc9dff] mb-6">Your Personal Guide</h2>
+            <p className="text-lg text-[#cc9dff]/70 leading-relaxed">
+              Through live interaction and intuitive connection, we'll explore your 
+              questions, concerns, and aspirations together. Every reading is a 
+              sacred space for clarity and guidance.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative min-h-screen flex items-center py-32">
+        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-16">
+          {[
+            {
+              title: "Personal Readings",
+              description: "One-on-one live sessions where we explore your path through the cards. Each reading is uniquely yours."
+            },
+            {
+              title: "Special Events",
+              description: "Bring the magic of live tarot readings to your gatherings, parties, or corporate events."
+            }
+          ].map((item, i) => (
+            <div 
+              key={i}
+              className="bg-black/40 backdrop-blur-sm p-8 rounded-lg border border-[#cc9dff]/20"
+              style={{ 
+                transform: `translateY(${scrollY * (i * 0.1 - 0.2)}px)`,
+                boxShadow: '0 0 30px rgba(0,0,0,0.5)'
+              }}
+            >
+              <h3 className="text-2xl font-bold text-[#cc9dff] mb-4">{item.title}</h3>
+              <p className="text-[#cc9dff]/70">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="relative min-h-screen flex items-center justify-center py-32">
+        <div 
+          className="text-center max-w-2xl px-4"
+          style={{ transform: `scale(${1 + scrollY * 0.0001})` }}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <h2 className="text-4xl font-bold text-[#cc9dff] mb-6">Begin Your Journey</h2>
+          <p className="text-xl text-[#cc9dff]/70 mb-8">
+            Ready to explore what the cards have in store for you? Let's connect for a live reading.
+          </p>
+          <button className="px-8 py-4 bg-[#2a1744] hover:bg-[#3a1f5e] text-[#cc9dff] rounded-full text-xl transition-all transform hover:scale-105 border border-[#cc9dff]/30">
+            Book Your Reading
+          </button>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default ParallaxHome;
