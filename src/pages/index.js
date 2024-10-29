@@ -166,7 +166,7 @@ const ParallaxHome = () => {
           >
             <h2 className="text-4xl font-bold text-[#cc9dff] mb-6">Your Personal Guide</h2>
             <p className="text-lg text-[#cc9dff]/70 leading-relaxed">
-              Through live interaction and intuitive connection, we'll explore your 
+              Through live interaction and intuitive connection, we&apos;ll explore your 
               questions, concerns, and aspirations together. Every reading is a 
               sacred space for clarity and guidance.
             </p>
